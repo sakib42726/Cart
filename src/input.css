@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .box {
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid goldenrod;
+  }
+  .img_box {
+    width: 100%;
+    height: 180px;
+  }
+  .img_box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+@layer utilities {
+  .container {
+    transition: all 0.3s;
+  }
+  button{
+    @apply bg-[goldenrod] w-full font-bold text-white py-2 mt-3
+  }
+}

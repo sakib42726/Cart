@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Project</title>
+    <link rel="stylesheet" href="/dist/output.css">
+</head>
+
+<body>
+    <!-- Start Header Sec -->
+    <div class="header_sec bg-[#3f4d41] p-[30px]">
+        <div class="container">
+            <div class="flex flex-wrap justify-between items-center">
+                <h1 class="text-white font-bold text-[25px] uppercase">Shoping Cart</h1>
+                <div class="flex flex-wrap items-center bg-white px-6 py-3 rounded-md">
+                    <span class="mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                            class="w-7 h-7 fill-[#3f4d41]">
+                            <path fill-rule="evenodd"
+                                d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 004.25 22.5h15.5a1.875 1.875 0 001.865-2.071l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    <div class="px-5 bg-[#a38708] flex items-center justify-center rounded-md">
+                        <p id="count" class="flex items-center justify-center text-[20px] text-[#273c96] font-semibold">
+                            0
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Header Sec -->
+    <!-- Start Cart Sec -->
+    <div class="cart_sec py-10">
+        <div class="container">
+            <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-2 gap-3 col-span-2" id="root">
+
+                </div>
+
+                <div class="col-span-1">
+
+                    <div class="sidebar text-center bg-[#eee] py-3 px-2">
+                        <div class="head w-full bg-[goldenrod] rounded-sm text-white font-bold mb-4">
+                            <p class="py-2">My Cart</p>
+                        </div>
+                        <div id="cartItem"></div>
+                        <div class="foot flex flex-wrap justify-between border-t-2 border-indigo-600 mt-8">
+                            <h3 class="font-bold">Total</h3>
+                            <div id="total" class="text-red-700 font-bold">$ 0.00</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Cart Sec -->
+    <script src="/src/assets/js/script.js"  type="module"></script>
+    <script>
+        
+        //
+        //
+        let basket = [];
+        // Add Cart
+        function addCart(id){
+            let selectItem = id;
+
+            let search = basket.find((item) => item.id === selectItem);
+
+            if (search === undefined) {
+                basket.push({
+                    id: selectItem,
+                    item: 1,
+                })
+            } else {
+                search.item += 1;
+            }
+
+
+
+            updateItem(selectItem);
+            displayCart();
+        };
+
+        // Update item
+        let updateItem = (id) => {
+            let search = basket.find((item) => item.id === id);
+            // console.log(search.item);
+            document.querySelector('#count').innerHTML = search.item;
+            calculation();
+        }
+
+        // calculation
+        let calculation = () => {
+            let count = document.querySelector('#count');
+
+            count.innerHTML = basket.map((item) => item.item).reduce((prv, curr) => prv + curr, 0);
+        }
+
+        // Cart display{
+        let displayCart =()=> {
+            if (basket.length === 0) {
+                document.querySelector('#cartItem').innerHTML = 'Your cart is Empty';
+            } else {
+                document.querySelector('#cartItem').innerHTML = basket.map((items) => {
+                    let { image, title, price } = items;
+
+                    return `
+                    <div class="flex flex-wrap justify-between items-center">
+            <div class="row_img w-[50px] h-[50px]">
+                <img class="w-full h-full object-cover object-cente rounded-full" src="${image}" alt="">
+            </div>
+            <h1>${title}</h1>
+            <h2 class="text-red-900 font-bold">$ ${price}.00</h2>
+            <button onclick='deleteCart("+ (j++) +")'>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#e01a1a]">
+                    <path fill-rule="evenodd"
+                        d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        
+        
+        </div>
+                    
+                    `
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+<!-- return (
+`<div class="box mb-4">
+    <div class="img_box">
+        <img src="${image}" alt="image">
+    </div>
+    <div class="text-center py-3 font-mono">
+        <h1>${title}</h1>
+        <h2 class="text-red-700 mt-2 font-bold">$ ${price}.00</h2>` +
+        "<button onclick='addtocart()'>Add to Cart</button>"+`
+    </div>
+</div>`
+        ); -->
+
+<!-- <button class="bg-[goldenrod] w-full font-bold text-white py-2 mt-3" onclick="addtocart('+ i++ +')">Add to
+    Cart</button> -->
